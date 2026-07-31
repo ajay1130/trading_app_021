@@ -3,6 +3,9 @@ import 'package:trading_app_021/util/exports.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Use bundled Inter fonts; do not fetch from fonts.gstatic.com at runtime.
+  GoogleFonts.config.allowRuntimeFetching = false;
+
   // Initialize persistence before providers read from it.
   await PersistenceService.instance.init();
 
