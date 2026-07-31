@@ -41,7 +41,7 @@ class PortfolioSummaryCard extends StatelessWidget {
                 AppColors.cardBgElevated.withValues(alpha: 0.8),
               ],
             ),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(Dimens.radius16),
             border: Border.all(
               color: isProfit
                   ? AppColors.profitGreen.withValues(alpha: 0.2)
@@ -70,7 +70,7 @@ class PortfolioSummaryCard extends StatelessWidget {
                         ? Icons.trending_up_rounded
                         : Icons.trending_down_rounded,
                     color: isProfit ? AppColors.profitGreen : AppColors.lossRed,
-                    size: 24,
+                    size: Dimens.size24,
                   ),
                   const SizedBox(width: Dimens.pad8),
                   Flexible(
@@ -98,7 +98,7 @@ class PortfolioSummaryCard extends StatelessWidget {
                       color:
                           (isProfit ? AppColors.profitGreen : AppColors.lossRed)
                               .withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(Dimens.radius6),
                     ),
                     child: Text(
                       '${isProfit ? '+' : ''}${totalPnlPercent.toStringAsFixed(2)}%',
@@ -124,7 +124,7 @@ class PortfolioSummaryCard extends StatelessWidget {
               ),
 
               const SizedBox(height: Dimens.pad16),
-              Container(height: 1, color: AppColors.border),
+              Container(height: Dimens.size1, color: AppColors.border),
               const SizedBox(height: Dimens.pad16),
 
               // Details row
@@ -137,7 +137,11 @@ class PortfolioSummaryCard extends StatelessWidget {
                           '₹${AppFormatters.currency.format(totalInvestedPaise / 100.0)}',
                     ),
                   ),
-                  Container(width: 1, height: 36, color: AppColors.border),
+                  Container(
+                    width: Dimens.size1,
+                    height: Dimens.size36,
+                    color: AppColors.border,
+                  ),
                   Expanded(
                     child: _SummaryCell(
                       label: AppStrings.currentValue,

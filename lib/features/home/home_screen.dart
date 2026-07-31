@@ -23,7 +23,9 @@ class HomeScreen extends StatelessWidget {
       ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
-          border: Border(top: BorderSide(color: AppColors.border, width: 1)),
+          border: Border(
+            top: BorderSide(color: AppColors.border, width: Dimens.size1),
+          ),
         ),
         child: Consumer<NavigationProvider>(
           builder: (context, nav, child) {

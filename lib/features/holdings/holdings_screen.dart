@@ -68,7 +68,7 @@ class _HoldingsScreenState extends State<HoldingsScreen> {
               // Holdings list
               Expanded(
                 child: ListView.builder(
-                  padding: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.only(bottom: Dimens.pad16),
                   itemCount: sorted.length,
                   itemBuilder: (context, index) {
                     final holding = sorted[index];

@@ -27,7 +27,7 @@ class _PriceTileState extends State<PriceTile>
     super.initState();
     _flashController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 700),
+      duration: const Duration(milliseconds: Dimens.duration300ms),
     );
     _flashOpacity = Tween<double>(
       begin: 1.0,
@@ -62,11 +62,17 @@ class _PriceTileState extends State<PriceTile>
         return GestureDetector(
           onTap: widget.onTap,
           child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            margin: const EdgeInsets.symmetric(
+              horizontal: Dimens.pad16,
+              vertical: Dimens.pad3,
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: Dimens.pad16,
+              vertical: Dimens.pad14,
+            ),
             decoration: BoxDecoration(
               color: AppColors.cardBg,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(Dimens.radius12),
               border: Border.all(color: AppColors.border),
             ),
             child: tick == null
@@ -86,7 +92,7 @@ class _PriceTileState extends State<PriceTile>
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            const SizedBox(height: 3),
+                            const SizedBox(height: Dimens.pad3),
                             Text(
                               companyName,
                               style: const TextStyle(
@@ -183,7 +189,7 @@ class _PriceTileState extends State<PriceTile>
       height: height,
       decoration: BoxDecoration(
         color: AppColors.cardBgElevated,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(Dimens.radius4),
       ),
     );
   }

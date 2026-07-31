@@ -19,14 +19,17 @@ class WatchlistScreen extends StatelessWidget {
               subtitle: AppStrings.emptyWatchlistsSubtitle,
               action: ElevatedButton.icon(
                 onPressed: () => _showCreateDialog(context),
-                icon: const Icon(Icons.add, size: 18),
+                icon: const Icon(Icons.add, size: Dimens.icon18),
                 label: const Text(AppStrings.createWatchlist),
               ),
             );
           }
 
           return ListView.builder(
-            padding: const EdgeInsets.only(top: 8, bottom: 80),
+            padding: const EdgeInsets.only(
+              top: Dimens.pad8,
+              bottom: Dimens.size80,
+            ),
             itemCount: provider.watchlists.length,
             itemBuilder: (context, index) {
               final watchlist = provider.watchlists[index];
@@ -100,12 +103,12 @@ class WatchlistScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              margin: const EdgeInsets.only(top: 8),
+              margin: const EdgeInsets.only(top: Dimens.pad8),
               width: Dimens.pad40,
               height: Dimens.pad4,
               decoration: BoxDecoration(
                 color: AppColors.textMuted,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(Dimens.radius2),
               ),
             ),
             const SizedBox(height: Dimens.pad16),
@@ -170,7 +173,7 @@ class WatchlistScreen extends StatelessWidget {
                 Navigator.pop(ctx);
               }
             },
-            child: const Text('Rename'),
+            child: const Text(AppStrings.rename),
           ),
         ],
       ),
@@ -185,12 +188,12 @@ class WatchlistScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete Watchlist'),
-        content: Text('Are you sure you want to delete "$name"?'),
+        title: const Text(AppStrings.deleteWatchlistTitle),
+        content: Text(AppStrings.deleteWatchlistConfirmMsg(name)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: const Text(AppStrings.cancel),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.lossRed),
@@ -198,7 +201,7 @@ class WatchlistScreen extends StatelessWidget {
               context.read<WatchlistProvider>().deleteWatchlist(watchlistId);
               Navigator.pop(ctx);
             },
-            child: const Text('Delete'),
+            child: const Text(AppStrings.delete),
           ),
         ],
       ),
@@ -222,25 +225,28 @@ class _WatchlistCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      margin: const EdgeInsets.symmetric(
+        horizontal: Dimens.pad16,
+        vertical: Dimens.pad6,
+      ),
       child: InkWell(
         onTap: onTap,
         onLongPress: onLongPress,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(Dimens.radius12),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(Dimens.pad16),
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(Dimens.pad10),
                 decoration: BoxDecoration(
                   color: AppColors.primary.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(Dimens.radius10),
                 ),
                 child: const Icon(
                   Icons.bookmark_rounded,
                   color: AppColors.primary,
-                  size: 22,
+                  size: Dimens.icon22,
                 ),
               ),
               const SizedBox(width: Dimens.pad14),
@@ -251,7 +257,7 @@ class _WatchlistCard extends StatelessWidget {
                     Text(name, style: Theme.of(context).textTheme.titleMedium),
                     const SizedBox(height: Dimens.pad4),
                     Text(
-                      '$stockCount stock${stockCount == 1 ? '' : 's'}',
+                      AppStrings.stockCountLabel(stockCount),
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],

@@ -63,7 +63,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen>
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(Dimens.pad24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -80,8 +80,8 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen>
                       child: Opacity(
                         opacity: _fadeAnimation.value.clamp(0.0, 1.0),
                         child: Container(
-                          width: 120,
-                          height: 120,
+                          width: Dimens.size120,
+                          height: Dimens.size120,
                           decoration: BoxDecoration(
                             color: AppColors.profitGreen.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
@@ -89,7 +89,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen>
                           child: const Icon(
                             Icons.check_circle_rounded,
                             color: AppColors.profitGreen,
-                            size: 80,
+                            size: Dimens.size80,
                           ),
                         ),
                       ),
@@ -112,16 +112,16 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen>
                   ),
                 ),
               ),
-              const SizedBox(height: 48),
+              const SizedBox(height: Dimens.size48),
 
               // Order details card
               FadeTransition(
                 opacity: _fadeAnimation,
                 child: Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(Dimens.pad20),
                   decoration: BoxDecoration(
                     color: AppColors.cardBgElevated,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(Dimens.radius16),
                     border: Border.all(color: AppColors.border),
                     boxShadow: [
                       BoxShadow(
@@ -139,12 +139,14 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen>
                         children: [
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
+                              horizontal: Dimens.pad12,
+                              vertical: Dimens.pad6,
                             ),
                             decoration: BoxDecoration(
                               color: themeColor.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(6),
+                              borderRadius: BorderRadius.circular(
+                                Dimens.radius6,
+                              ),
                             ),
                             child: Text(
                               isBuy ? AppStrings.buy : AppStrings.sell,
@@ -178,7 +180,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen>
                         ),
                       ),
                       const SizedBox(height: Dimens.pad16),
-                      Container(height: 1, color: AppColors.border),
+                      Container(height: Dimens.size1, color: AppColors.border),
                       const SizedBox(height: Dimens.pad16),
                       _buildDetailRow(
                         AppStrings.qty,
@@ -210,7 +212,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen>
               FadeTransition(
                 opacity: _fadeAnimation,
                 child: SizedBox(
-                  height: 56,
+                  height: Dimens.size56,
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).popUntil((route) => route.isFirst);
@@ -219,7 +221,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen>
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(Dimens.radius12),
                       ),
                       elevation: 0,
                     ),

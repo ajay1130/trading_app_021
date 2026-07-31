@@ -15,8 +15,6 @@ class WatchlistRow extends StatefulWidget {
 
 class _WatchlistRowState extends State<WatchlistRow>
     with SingleTickerProviderStateMixin {
-  static final _priceFormat = NumberFormat('#,##,##0.00', 'en_IN');
-
   late AnimationController _flashController;
   late Animation<double> _flashOpacity;
   int? _previousLtp;
@@ -60,7 +58,10 @@ class _WatchlistRowState extends State<WatchlistRow>
         if (tick != null) _previousLtp = tick.ltpPaise;
 
         return Card(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          margin: const EdgeInsets.symmetric(
+            horizontal: Dimens.pad16,
+            vertical: Dimens.pad4,
+          ),
           child: InkWell(
             onTap: () {
               Navigator.push(
@@ -70,9 +71,12 @@ class _WatchlistRowState extends State<WatchlistRow>
                 ),
               );
             },
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(Dimens.radius12),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              padding: const EdgeInsets.symmetric(
+                horizontal: Dimens.pad16,
+                vertical: Dimens.pad14,
+              ),
               child: Row(
                 children: [
                   // Stock info
@@ -118,7 +122,7 @@ class _WatchlistRowState extends State<WatchlistRow>
                               _flashOpacity.value,
                             )!;
                             return Text(
-                              '₹${_priceFormat.format(tick.ltpRupees)}',
+                              '₹${AppFormatters.currency.format(tick.ltpRupees)}',
                               style: TextStyle(
                                 color: color,
                                 fontWeight: FontWeight.w600,

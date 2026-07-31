@@ -14,8 +14,8 @@ class WatchlistDetailScreen extends StatelessWidget {
 
         if (watchlist == null) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Watchlist')),
-            body: const Center(child: Text('Watchlist not found')),
+            appBar: AppBar(title: const Text(AppStrings.watchlist)),
+            body: const Center(child: Text(AppStrings.watchlistNotFound)),
           );
         }
 
@@ -54,12 +54,15 @@ class WatchlistDetailScreen extends StatelessWidget {
                   subtitle: AppStrings.emptyWatchlistSubtitle,
                   action: ElevatedButton.icon(
                     onPressed: () => _showStockPicker(context),
-                    icon: const Icon(Icons.add, size: 18),
-                    label: const Text('Add Stocks'),
+                    icon: const Icon(Icons.add, size: Dimens.icon18),
+                    label: const Text(AppStrings.addStocks),
                   ),
                 )
               : ReorderableListView.builder(
-                  padding: const EdgeInsets.only(top: 8, bottom: 80),
+                  padding: const EdgeInsets.only(
+                    top: Dimens.pad8,
+                    bottom: Dimens.size80,
+                  ),
                   itemCount: watchlist.symbols.length,
                   onReorder: (oldIndex, newIndex) {
                     provider.reorderStocks(watchlistId, oldIndex, newIndex);
@@ -89,14 +92,14 @@ class WatchlistDetailScreen extends StatelessWidget {
                       direction: DismissDirection.endToStart,
                       background: Container(
                         alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.only(right: 20),
+                        padding: const EdgeInsets.only(right: Dimens.pad20),
                         margin: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 6,
+                          horizontal: Dimens.pad16,
+                          vertical: Dimens.pad6,
                         ),
                         decoration: BoxDecoration(
                           color: AppColors.lossRed.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(Dimens.radius12),
                         ),
                         child: const Icon(
                           Icons.delete_rounded,
@@ -107,10 +110,14 @@ class WatchlistDetailScreen extends StatelessWidget {
                         provider.removeStock(watchlistId, symbol);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('$symbol removed from watchlist'),
-                            duration: const Duration(seconds: 2),
+                            content: Text(
+                              AppStrings.removedFromWatchlist(symbol),
+                            ),
+                            duration: const Duration(
+                              seconds: Dimens.duration2s,
+                            ),
                             action: SnackBarAction(
-                              label: 'Undo',
+                              label: AppStrings.undo,
                               onPressed: () {
                                 provider.addStock(watchlistId, symbol);
                               },

@@ -49,7 +49,7 @@ class ChangeBadge extends StatelessWidget {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (icon != null) Icon(icon, color: color, size: 20),
+          if (icon != null) Icon(icon, color: color, size: Dimens.icon20),
           Text(
             '$changeStr $percentStr',
             style: TextStyle(
@@ -63,15 +63,18 @@ class ChangeBadge extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: Dimens.pad8,
+        vertical: Dimens.pad4,
+      ),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(Dimens.radius6),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (icon != null) Icon(icon, color: color, size: 18),
+          if (icon != null) Icon(icon, color: color, size: Dimens.icon18),
           Text(
             '$changeStr $percentStr',
             style: TextStyle(

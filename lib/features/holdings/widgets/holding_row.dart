@@ -16,8 +16,6 @@ class HoldingRow extends StatefulWidget {
 
 class _HoldingRowState extends State<HoldingRow>
     with SingleTickerProviderStateMixin {
-  static final _priceFormat = NumberFormat('#,##,##0.00', 'en_IN');
-
   late AnimationController _flashController;
   late Animation<double> _flashOpacity;
   int? _previousLtp;
@@ -28,7 +26,7 @@ class _HoldingRowState extends State<HoldingRow>
     super.initState();
     _flashController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 700),
+      duration: const Duration(milliseconds: Dimens.duration700ms),
     );
     _flashOpacity = Tween<double>(
       begin: 1.0,
@@ -67,12 +65,15 @@ class _HoldingRowState extends State<HoldingRow>
         final isProfit = pnl >= 0;
 
         return Card(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+          margin: const EdgeInsets.symmetric(
+            horizontal: Dimens.pad16,
+            vertical: Dimens.pad5,
+          ),
           child: InkWell(
             onTap: widget.onTap,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(Dimens.radius12),
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(Dimens.pad16),
               child: Column(
                 children: [
                   // Top row: Symbol + LTP
@@ -113,7 +114,7 @@ class _HoldingRowState extends State<HoldingRow>
                                 _flashOpacity.value,
                               )!;
                               return Text(
-                                '₹${_priceFormat.format(ltpPaise / 100.0)}',
+                                '₹${AppFormatters.currency.format(ltpPaise / 100.0)}',
                                 style: TextStyle(
                                   color: color,
                                   fontWeight: FontWeight.w600,
@@ -122,7 +123,7 @@ class _HoldingRowState extends State<HoldingRow>
                               );
                             },
                           ),
-                          const SizedBox(height: 2),
+                          const SizedBox(height: Dimens.pad2),
                           const Text(
                             AppStrings.livePrice,
                             style: TextStyle(
@@ -136,7 +137,7 @@ class _HoldingRowState extends State<HoldingRow>
                   ),
 
                   const SizedBox(height: Dimens.pad12),
-                  Container(height: 1, color: AppColors.border),
+                  Container(height: Dimens.size1, color: AppColors.border),
                   const SizedBox(height: Dimens.pad12),
 
                   // Bottom row: Details grid
@@ -145,22 +146,22 @@ class _HoldingRowState extends State<HoldingRow>
                       _DetailCell(
                         label: AppStrings.qty,
                         value: '${holding.quantity}',
-                        flex: 2,
+                        flex: Dimens.flex2,
                       ),
                       _DetailCell(
                         label: AppStrings.avgCost,
                         value:
                             '₹${AppFormatters.currency.format(holding.avgCostRupees)}',
-                        flex: 3,
+                        flex: Dimens.flex3,
                       ),
                       _DetailCell(
                         label: AppStrings.invested,
                         value:
                             '₹${AppFormatters.currency.format(holding.investedRupees)}',
-                        flex: 3,
+                        flex: Dimens.flex3,
                       ),
                       Expanded(
-                        flex: 3,
+                        flex: Dimens.flex3,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
@@ -228,7 +229,7 @@ class _DetailCell extends StatelessWidget {
               fontSize: Dimens.font10,
             ),
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: Dimens.pad2),
           FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,

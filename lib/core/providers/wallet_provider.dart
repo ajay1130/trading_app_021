@@ -44,13 +44,13 @@ class WalletProvider extends ChangeNotifier {
   /// Check if a Buy order can be placed.
   /// Returns null if valid, or an error message if not.
   String? validateBuyOrder(int quantity, int pricePaise) {
-    if (quantity <= 0) return 'Quantity must be greater than zero';
+    if (quantity <= 0) return AppStrings.errQtyGreaterThanZero;
 
     final totalPaise = quantity * pricePaise;
     if (totalPaise > _balancePaise) {
       final required = (totalPaise / 100.0).toStringAsFixed(2);
       final available = (_balancePaise / 100.0).toStringAsFixed(2);
-      return 'Insufficient balance. Required: ₹$required, Available: ₹$available';
+      return AppStrings.errInsufficientBalance(required, available);
     }
 
     return null;
@@ -63,11 +63,11 @@ class WalletProvider extends ChangeNotifier {
     String symbol,
     HoldingsProvider holdings,
   ) {
-    if (quantity <= 0) return 'Quantity must be greater than zero';
+    if (quantity <= 0) return AppStrings.errQtyGreaterThanZero;
 
     final held = holdings.quantityHeld(symbol);
     if (quantity > held) {
-      return 'Insufficient holdings. You hold $held shares of $symbol';
+      return AppStrings.errInsufficientHoldings(held, symbol);
     }
 
     return null;

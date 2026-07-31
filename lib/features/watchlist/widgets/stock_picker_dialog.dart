@@ -179,9 +179,13 @@ class _StockPickerDialogState extends State<StockPickerDialog> {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          '${stock.symbol} added to watchlist',
+                                          AppStrings.addedToWatchlist(
+                                            stock.symbol,
+                                          ),
                                         ),
-                                        duration: const Duration(seconds: 1),
+                                        duration: const Duration(
+                                          seconds: Dimens.duration1s,
+                                        ),
                                       ),
                                     );
                                   },

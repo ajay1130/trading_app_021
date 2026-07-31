@@ -18,7 +18,7 @@ class OrderHistoryScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(Dimens.pad20),
                     decoration: BoxDecoration(
                       color: AppColors.cardBgElevated,
                       shape: BoxShape.circle,
@@ -26,7 +26,7 @@ class OrderHistoryScreen extends StatelessWidget {
                     ),
                     child: const Icon(
                       Icons.receipt_long_rounded,
-                      size: 48,
+                      size: Dimens.size48,
                       color: AppColors.textMuted,
                     ),
                   ),
@@ -54,11 +54,11 @@ class OrderHistoryScreen extends StatelessWidget {
             children: [
               // Wallet balance header
               Container(
-                margin: const EdgeInsets.all(16),
-                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.all(Dimens.pad16),
+                padding: const EdgeInsets.all(Dimens.pad16),
                 decoration: BoxDecoration(
                   color: AppColors.cardBg,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(Dimens.radius12),
                   border: Border.all(color: AppColors.border),
                 ),
                 child: Row(
@@ -89,7 +89,7 @@ class OrderHistoryScreen extends StatelessWidget {
               // Orders list
               Expanded(
                 child: ListView.builder(
-                  padding: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.only(bottom: Dimens.pad16),
                   itemCount: orders.length,
                   itemBuilder: (context, index) {
                     final order = orders[index];
@@ -97,18 +97,18 @@ class OrderHistoryScreen extends StatelessWidget {
 
                     return Card(
                       margin: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 4,
+                        horizontal: Dimens.pad16,
+                        vertical: Dimens.pad4,
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(14),
+                        padding: const EdgeInsets.all(Dimens.pad14),
                         child: Row(
                           children: [
                             // Side badge
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 5,
+                                horizontal: Dimens.pad10,
+                                vertical: Dimens.pad5,
                               ),
                               decoration: BoxDecoration(
                                 color:
@@ -116,7 +116,9 @@ class OrderHistoryScreen extends StatelessWidget {
                                             ? AppColors.buyGreen
                                             : AppColors.sellRed)
                                         .withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(6),
+                                borderRadius: BorderRadius.circular(
+                                  Dimens.radius6,
+                                ),
                               ),
                               child: Text(
                                 isBuy ? AppStrings.buy : AppStrings.sell,
@@ -145,7 +147,7 @@ class OrderHistoryScreen extends StatelessWidget {
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  const SizedBox(height: 2),
+                                  const SizedBox(height: Dimens.pad2),
                                   Text(
                                     '${order.quantity} × ₹${AppFormatters.currency.format(order.priceRupees)}',
                                     style: const TextStyle(
@@ -173,7 +175,7 @@ class OrderHistoryScreen extends StatelessWidget {
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  const SizedBox(height: 2),
+                                  const SizedBox(height: Dimens.pad2),
                                   Text(
                                     _formatTime(order.timestamp),
                                     style: const TextStyle(

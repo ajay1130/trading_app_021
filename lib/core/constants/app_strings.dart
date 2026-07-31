@@ -68,4 +68,28 @@ class AppStrings {
       'Place your first order from Market or Watchlist';
   static const String market = 'Market';
   static const String appName = "021 Trading";
+
+  // Feature: Wallet/Validation
+  static const String errQtyGreaterThanZero =
+      'Quantity must be greater than zero';
+  static const String errInvalidQuantity =
+      'Enter a valid quantity (positive integer)';
+  static const String errLivePriceNotAvailable =
+      'Live price not available. Please try again.';
+  static String errInsufficientBalance(String req, String avail) =>
+      'Insufficient balance. Required: ₹$req, Available: ₹$avail';
+  static String errInsufficientHoldings(int held, String symbol) =>
+      'Insufficient holdings. You hold $held shares of $symbol';
+
+  // Feature: Watchlist Actions
+  static const String undo = 'Undo';
+  static const String watchlistNotFound = 'Watchlist not found';
+  static const String deleteWatchlistTitle = 'Delete Watchlist';
+  static String deleteWatchlistConfirmMsg(String name) =>
+      'Are you sure you want to delete "$name"?';
+  static String stockCountLabel(int count) =>
+      '$count stock${count == 1 ? '' : 's'}';
+  static String removedFromWatchlist(String symbol) =>
+      '$symbol removed from watchlist';
+  static String addedToWatchlist(String symbol) => '$symbol added to watchlist';
 }

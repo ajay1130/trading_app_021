@@ -29,11 +29,9 @@ class PriceText extends StatelessWidget {
     this.colorize = false,
   });
 
-  static final _formatter = NumberFormat('#,##,##0.00', 'en_IN');
-
   @override
   Widget build(BuildContext context) {
-    final formatted = _formatter.format(priceRupees.abs());
+    final formatted = AppFormatters.currency.format(priceRupees.abs());
     final prefix = StringBuffer();
 
     if (showSign && priceRupees > 0) prefix.write('+');

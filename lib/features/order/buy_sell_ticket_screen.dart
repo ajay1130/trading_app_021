@@ -32,6 +32,7 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
 
     final qty = int.tryParse(_qtyController.text);
     if (qty == null || qty <= 0) {
+      setState(() => _error = AppStrings.errInvalidQuantity);
       return;
     }
 
@@ -42,7 +43,7 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
     final priceTick = marketProvider.getPrice(widget.symbol);
     if (priceTick == null) {
       setState(() {
-        _error = 'Live price not available. Please try again.';
+        _error = AppStrings.errLivePriceNotAvailable;
       });
       return;
     }
@@ -195,7 +196,7 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
                                 ? Icons.arrow_drop_up_rounded
                                 : Icons.arrow_drop_down_rounded,
                             color: color,
-                            size: 22,
+                            size: Dimens.icon22,
                           ),
                           Text(
                             '${isPositive ? '+' : ''}${changeRupees.toStringAsFixed(2)} (${changePercent.toStringAsFixed(2)}%)',
@@ -334,7 +335,7 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
                         bold: true,
                       ),
                       const SizedBox(height: Dimens.pad12),
-                      Container(height: 1, color: AppColors.border),
+                      Container(height: Dimens.size1, color: AppColors.border),
                       const SizedBox(height: Dimens.pad12),
                       if (_isBuy)
                         _summaryRow(
@@ -370,7 +371,7 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
                     const Icon(
                       Icons.error_outline,
                       color: AppColors.lossRed,
-                      size: 18,
+                      size: Dimens.icon18,
                     ),
                     const SizedBox(width: Dimens.pad8),
                     Expanded(
@@ -389,7 +390,7 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
 
             // Submit button
             SizedBox(
-              height: 56,
+              height: Dimens.size56,
               child: ElevatedButton(
                 onPressed:
                     (_isSubmitting ||

@@ -64,12 +64,15 @@ class _LivePricesScreenState extends State<LivePricesScreen>
         ),
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+        padding: const EdgeInsets.symmetric(
+          vertical: Dimens.pad8,
+          horizontal: Dimens.pad0,
+        ),
         itemCount: kStocks.length,
         itemBuilder: (context, index) {
           final stock = kStocks[index];
           return Padding(
-            padding: const EdgeInsets.only(bottom: 4.0),
+            padding: const EdgeInsets.only(bottom: Dimens.pad4),
             child: PriceTile(
               symbol: stock.symbol,
               onTap: () {
