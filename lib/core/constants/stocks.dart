@@ -5,10 +5,14 @@ import 'package:trading_app_021/util/exports.dart';
 // All prices are stored in paise (1 ₹ = 100 paise) to avoid floating-point
 // drift in monetary calculations.
 
-// Configurable batch interval for the ₹mock market feed.
+// Configurable batch interval for the mock market feed.
 // Every interval, 3-6 random stocks get a price update (like real broker feeds).
 // Default 1000ms = 1 batch/sec. Lower = more frequent (stress test).
+// Also changeable at runtime from Live Prices → tick-rate menu.
 const int kDefaultTickIntervalMs = 1000;
+
+/// Preset batch intervals for the Live Prices debug tick-rate control.
+const List<int> kTickIntervalPresetsMs = [1000, 500, 200, 100];
 
 /// Starting wallet balance: ₹10,00,000 (10 lakh) in paise.
 const int kStartingBalancePaise = 1000000 * 100;

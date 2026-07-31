@@ -31,6 +31,16 @@ class _LivePricesScreenState extends State<LivePricesScreen>
     super.dispose();
   }
 
+  void _onTickRateSelected(int ms) {
+    context.read<MarketDataProvider>().setBatchIntervalMs(ms);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppStrings.tickRateSnack(ms)),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,6 +72,38 @@ class _LivePricesScreenState extends State<LivePricesScreen>
             ),
           ],
         ),
+        actions: [
+          Selector<MarketDataProvider, int>(
+            selector: (_, provider) => provider.batchIntervalMs,
+            builder: (context, intervalMs, _) {
+              return PopupMenuButton<int>(
+                icon: const Icon(Icons.speed_rounded, size: Dimens.size22),
+                tooltip: AppStrings.tickRateTooltip,
+                initialValue: intervalMs,
+                onSelected: _onTickRateSelected,
+                itemBuilder: (_) => [
+                  const PopupMenuItem<int>(
+                    enabled: false,
+                    child: Text(
+                      AppStrings.tickRate,
+                      style: TextStyle(
+                        color: AppColors.textMuted,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  ...kTickIntervalPresetsMs.map(
+                    (ms) => CheckedPopupMenuItem<int>(
+                      value: ms,
+                      checked: ms == intervalMs,
+                      child: Text(AppStrings.tickIntervalLabel(ms)),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
       ),
       body: ListView.builder(
         padding: const EdgeInsets.symmetric(

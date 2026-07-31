@@ -10,6 +10,13 @@ class AppStrings {
   // Feature: Live Prices
   static const String marketOverview = 'Market Overview';
   static const String livePrice = 'Live Price';
+  static const String tickRate = 'Tick Rate';
+  static const String tickRateTooltip = 'Configure mock feed tick rate';
+  static String tickIntervalLabel(int ms) {
+    if (ms >= 1000) return '${ms ~/ 1000}s (default)';
+    return '${ms}ms';
+  }
+  static String tickRateSnack(int ms) => 'Tick interval set to ${ms}ms';
 
   // Feature: Watchlist
   static const String watchlist = 'Watchlist';
@@ -57,6 +64,7 @@ class AppStrings {
   static const String totalPnl = 'Total P&L';
   static const String invested = 'Invested';
   static const String currentValue = 'Current Value';
+  static const String value = 'Value';
   static const String qty = 'Qty';
   static const String avgCost = 'Avg Cost';
 
@@ -88,7 +96,7 @@ class AppStrings {
   static String deleteWatchlistConfirmMsg(String name) =>
       'Are you sure you want to delete "$name"?';
   static String stockCountLabel(int count) =>
-      '$count stock${count == 1 ? '' : 's'}';
+      '$count stock${count <=1 ? '' : 's'}';
   static String removedFromWatchlist(String symbol) =>
       '$symbol removed from watchlist';
   static String addedToWatchlist(String symbol) => '$symbol added to watchlist';

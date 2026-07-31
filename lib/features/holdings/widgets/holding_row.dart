@@ -155,9 +155,9 @@ class _HoldingRowState extends State<HoldingRow>
                         flex: Dimens.flex3,
                       ),
                       _DetailCell(
-                        label: AppStrings.invested,
+                        label: AppStrings.value,
                         value:
-                            '₹${AppFormatters.currency.format(holding.investedRupees)}',
+                            '₹${AppFormatters.currency.format(holding.currentValueRupees(ltpPaise))}',
                         flex: Dimens.flex3,
                       ),
                       Expanded(

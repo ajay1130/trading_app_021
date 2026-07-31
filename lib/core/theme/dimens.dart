@@ -54,6 +54,7 @@ abstract class Dimens {
   // Additional sizes
   static const double size1 = 1.0;
   static const double size3 = 3.0;
+  static const double size22 = 22.0;
   static const double size24 = 24.0;
   static const double size36 = 36.0;
   static const double size48 = 48.0;

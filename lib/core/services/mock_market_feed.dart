@@ -17,6 +17,7 @@ class MockMarketFeedService {
 
   final _random = Random();
   Timer? _timer;
+  int _batchIntervalMs = kDefaultTickIntervalMs;
 
   /// Current prices in paise, keyed by symbol.
   final Map<String, int> _currentPrices = {};
@@ -36,12 +37,17 @@ class MockMarketFeedService {
   /// Whether the feed is currently running.
   bool get isRunning => _timer != null && _timer!.isActive;
 
+  /// Current batch interval in milliseconds.
+  int get batchIntervalMs => _batchIntervalMs;
+
   /// Start the mock feed. Initializes prices and begins emitting ticks.
   ///
   /// [batchIntervalMs] controls how often a batch of updates fires.
   /// Default 1000ms = 1 batch/sec (realistic broker feel).
   void start({int batchIntervalMs = kDefaultTickIntervalMs}) {
     if (isRunning) return;
+
+    _batchIntervalMs = batchIntervalMs;
 
     // Initialize prices from stock definitions.
     for (final stock in kStocks) {
@@ -54,9 +60,26 @@ class MockMarketFeedService {
       _emitTick(stock.symbol);
     }
 
-    // Start periodic batch tick generation.
+    _startTimer();
+  }
+
+  /// Change the tick batch interval at runtime (debug / stress testing).
+  ///
+  /// Keeps current prices; only restarts the periodic timer.
+  void setBatchIntervalMs(int batchIntervalMs) {
+    if (batchIntervalMs <= 0 || batchIntervalMs == _batchIntervalMs) return;
+    _batchIntervalMs = batchIntervalMs;
+    if (!isRunning && _currentPrices.isEmpty) {
+      start(batchIntervalMs: batchIntervalMs);
+      return;
+    }
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer?.cancel();
     _timer = Timer.periodic(
-      Duration(milliseconds: batchIntervalMs),
+      Duration(milliseconds: _batchIntervalMs),
       (_) => _generateBatch(),
     );
   }

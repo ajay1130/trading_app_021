@@ -32,6 +32,15 @@ class MarketDataProvider extends ChangeNotifier {
   /// Get the previous LTP for flash direction detection.
   int? getPreviousLtp(String symbol) => _previousLtp[symbol];
 
+  /// Current mock-feed batch interval in milliseconds.
+  int get batchIntervalMs => _feed.batchIntervalMs;
+
+  /// Change tick rate at runtime (used by the Live Prices debug control).
+  void setBatchIntervalMs(int batchIntervalMs) {
+    _feed.setBatchIntervalMs(batchIntervalMs);
+    notifyListeners();
+  }
+
   void _onTick(PriceTick tick) {
     // Track previous LTP before updating.
     final existing = _prices[tick.symbol];

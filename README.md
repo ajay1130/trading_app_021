@@ -6,7 +6,7 @@ A high-performance Flutter trading application built for the 021 Trading assignm
 1. **Watchlist**: Create, rename, delete, and reorder multiple watchlists. Swipe to delete. Live prices update in place.
 2. **Live Prices**: Real-time market feed with configurable tick rates. Prices flash green/red on updates.
 3. **Buy/Sell Ticket**: Simulated market orders with precise margin checks (implemented in integer paise to prevent floating-point drift).
-4. **Holdings**: Portfolio view showing live P&L and aggregate summaries. Sortable dynamically by P&L, Symbol, or Current Value as ticks arrive.
+4. **Holdings**: Portfolio view showing live P&L (qty, avg cost, LTP, current value, P&L ₹/%) and aggregate summaries. Sortable by P&L, Symbol, or Current Value.
 
 ## Tech Stack
 * **Flutter** (Stable Channel)
@@ -28,6 +28,15 @@ This app is designed to run perfectly with zero extra setup required. No code ge
    ```bash
    flutter run
    ```
+
+## Tick Rate (debug / stress test)
+
+The mock feed emits price batches on an interval (default **1000ms**). Change it in either place:
+
+1. **In-app (recommended for demo):** Market Overview → speed icon → pick `1s`, `500ms`, `200ms`, or `100ms`.
+2. **Constant:** edit `kDefaultTickIntervalMs` in `lib/core/constants/stocks.dart`.
+
+At `100ms`, several stocks update per batch (~30–60 ticks/sec overall), which is useful to verify the UI stays smooth under load.
 
 ## Architecture Notes
 * **Feature-First Structure**: Code is organized logically into `lib/features/` (home, holdings, order, etc.) rather than technical layers.
