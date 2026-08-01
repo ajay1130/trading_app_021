@@ -56,14 +56,21 @@ abstract class Dimens {
 
   // Additional sizes
   static const double size1 = 1.0;
+  static const double size2 = 2.0;
   static const double size3 = 3.0;
+  static const double size12 = 12.0;
   static const double size16 = 16.0;
+  static const double size18 = 18.0;
+  static const double size20 = 20.0;
   static const double size22 = 22.0;
   static const double size24 = 24.0;
   static const double size36 = 36.0;
   static const double size48 = 48.0;
   static const double size56 = 56.0;
+  static const double size60 = 60.0;
+  static const double size70 = 70.0;
   static const double size80 = 80.0;
+  static const double size100 = 100.0;
   static const double size120 = 120.0;
 
   // Durations

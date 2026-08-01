@@ -45,6 +45,7 @@ export 'package:trading_app_021/features/watchlist/widgets/stock_picker_dialog.d
 export 'package:trading_app_021/features/watchlist/widgets/watchlist_row.dart';
 export 'package:trading_app_021/shared/widgets/change_badge.dart';
 export 'package:trading_app_021/shared/widgets/empty_state.dart';
+export 'package:trading_app_021/shared/widgets/flashing_ltp_text.dart';
 export 'package:trading_app_021/shared/widgets/price_text.dart';
 export 'package:trading_app_021/shared/widgets/swipe_to_delete_row.dart';
 export 'package:trading_app_021/util/formatters.dart';

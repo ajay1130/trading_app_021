@@ -78,7 +78,7 @@ class _LivePricesScreenState extends State<LivePricesScreen>
             builder: (context, tp, _) => IconButton(
               icon: Icon(tp.isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded),
               onPressed: tp.toggle,
-              tooltip: 'Toggle theme',
+              tooltip: AppStrings.toolTipToggleTheme,
             ),
           ),
           Selector<MarketDataProvider, int>(

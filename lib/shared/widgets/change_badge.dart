@@ -24,7 +24,7 @@ class ChangeBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final isPositive = changeRupees > 0;
+    final isPositive = changeRupees >= 0;
     final isNegative = changeRupees < 0;
     final color = isPositive
         ? AppColors.profitGreen

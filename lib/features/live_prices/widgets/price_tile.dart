@@ -1,67 +1,22 @@
 import 'package:trading_app_021/util/exports.dart';
 
 /// Individual stock price tile with subtle LTP color flash on price change.
-///
-/// Mimics real trading apps (5paisa, Zerodha): only the price text briefly
-/// turns green/red on change, then fades back to white. No card background
-/// flash — keeps the UI calm and professional.
-class PriceTile extends StatefulWidget {
+class PriceTile extends StatelessWidget {
   final String symbol;
   final VoidCallback? onTap;
 
   const PriceTile({super.key, required this.symbol, this.onTap});
 
   @override
-  State<PriceTile> createState() => _PriceTileState();
-}
-
-class _PriceTileState extends State<PriceTile>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _flashController;
-  late Animation<double> _flashOpacity;
-  int? _previousLtp;
-  Color _flashColor = AppColors.profitGreen;
-
-  @override
-  void initState() {
-    super.initState();
-    _flashController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: Dimens.duration300ms),
-    );
-    _flashOpacity = Tween<double>(
-      begin: 1.0,
-      end: 0.0,
-    ).animate(CurvedAnimation(parent: _flashController, curve: Curves.easeOut));
-  }
-
-  @override
-  void dispose() {
-    _flashController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Selector<MarketDataProvider, PriceTick?>(
-      selector: (_, provider) => provider.getPrice(widget.symbol),
-      builder: (context, tick, child) {
+      selector: (_, provider) => provider.getPrice(symbol),
+      builder: (context, tick, _) {
         final c = context.colors;
-        // Detect direction and trigger flash.
-        if (tick != null &&
-            _previousLtp != null &&
-            _previousLtp != tick.ltpPaise) {
-          _flashColor = tick.ltpPaise > _previousLtp!
-              ? AppColors.profitGreen
-              : AppColors.lossRed;
-          _flashController.forward(from: 0.0);
-        }
-        if (tick != null) _previousLtp = tick.ltpPaise;
-
-        final companyName = kStockMap[widget.symbol]?.name ?? '';
+        final companyName = kStockMap[symbol]?.name ?? '';
 
         return GestureDetector(
-          onTap: widget.onTap,
+          onTap: onTap,
           child: Container(
             margin: const EdgeInsets.symmetric(
               horizontal: Dimens.pad16,
@@ -77,16 +32,15 @@ class _PriceTileState extends State<PriceTile>
               border: Border.all(color: c.border),
             ),
             child: tick == null
-                ? _buildShimmer()
+                ? _buildShimmer(context)
                 : Row(
                     children: [
-                      // Left: Symbol + Company name
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.symbol,
+                              symbol,
                               style: TextStyle(
                                 color: c.textPrimary,
                                 fontSize: Dimens.font15,
@@ -106,35 +60,16 @@ class _PriceTileState extends State<PriceTile>
                           ],
                         ),
                       ),
-
-                      // Right: LTP + Change
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          // LTP with subtle color flash
-                          _AnimatedBuilder(
-                            animation: _flashOpacity,
-                            builder: (context, _) {
-                              final c = context.colors;
-                              // During flash: show green/red. After: normal text color.
-                              final color = Color.lerp(
-                                c.textPrimary,
-                                _flashColor,
-                                _flashOpacity.value,
-                              )!;
-                              return Text(
-                                '₹${AppFormatters.currency.format(tick.ltpRupees)}',
-                                style: TextStyle(
-                                  color: color,
-                                  fontSize: Dimens.font15,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              );
-                            },
-                          ),
+                          FlashingLtpText(ltpPaise: tick.ltpPaise),
                           const SizedBox(height: Dimens.pad4),
-                          // Change — always colored green/red
-                          _buildChangeText(tick),
+                          ChangeBadge(
+                            changeRupees: tick.changeRupees,
+                            changePercent: tick.changePercent,
+                            compact: true,
+                          ),
                         ],
                       ),
                     ],
@@ -145,70 +80,38 @@ class _PriceTileState extends State<PriceTile>
     );
   }
 
-  Widget _buildChangeText(PriceTick tick) {
-    final isPositive = tick.changePaise >= 0;
-    final color = isPositive ? AppColors.profitGreen : AppColors.lossRed;
-    final sign = isPositive ? '+' : '';
-    final arrow = isPositive ? '▲' : '▼';
-
-    return Text(
-      '$arrow $sign${tick.changeRupees.toStringAsFixed(2)} (${tick.changePercent.toStringAsFixed(2)}%)',
-      style: TextStyle(
-        color: color,
-        fontSize: Dimens.font12,
-        fontWeight: FontWeight.w500,
-      ),
-    );
-  }
-
-  Widget _buildShimmer() {
+  Widget _buildShimmer(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _shimmerBlock(60, 18),
+            _shimmerBlock(context, Dimens.size60, Dimens.size18),
             const SizedBox(height: Dimens.pad6),
-            _shimmerBlock(100, 12),
+            _shimmerBlock(context, Dimens.size100, Dimens.size12),
           ],
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            _shimmerBlock(80, 18),
+            _shimmerBlock(context, Dimens.size80, Dimens.size18),
             const SizedBox(height: Dimens.pad6),
-            _shimmerBlock(70, 12),
+            _shimmerBlock(context, Dimens.size70, Dimens.size12),
           ],
         ),
       ],
     );
   }
 
-  Widget _shimmerBlock(double width, double height) {
-    final c = context.colors;
+  Widget _shimmerBlock(BuildContext context, double width, double height) {
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: c.cardBgElevated,
+        color: context.colors.cardBgElevated,
         borderRadius: BorderRadius.circular(Dimens.radius4),
       ),
     );
-  }
-}
-
-/// Lightweight AnimatedWidget wrapper for animation-driven rebuilds.
-class _AnimatedBuilder extends AnimatedWidget {
-  final TransitionBuilder builder;
-
-  const _AnimatedBuilder({
-    required Animation<dynamic> animation,
-    required this.builder,
-  }) : super(listenable: animation);
-
-  @override
-  Widget build(BuildContext context) {
-    return builder(context, null);
   }
 }

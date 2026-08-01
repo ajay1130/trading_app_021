@@ -129,7 +129,7 @@ class _HoldingsScreenState extends State<HoldingsScreen> {
         children: [
           Icon(
             icon,
-            size: 18,
+            size: Dimens.size18,
             color: isSelected ? AppColors.primary : c.textSecondary,
           ),
           const SizedBox(width: Dimens.pad10),

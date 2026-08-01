@@ -1,65 +1,20 @@
 import 'package:trading_app_021/util/exports.dart';
 
 /// Individual holding row with live P&L and subtle LTP flash.
-///
-/// Only the LTP text briefly flashes green/red on change, matching
-/// real broker app behavior. P&L numbers update silently.
-class HoldingRow extends StatefulWidget {
+class HoldingRow extends StatelessWidget {
   final Holding holding;
   final VoidCallback? onTap;
 
   const HoldingRow({super.key, required this.holding, this.onTap});
 
   @override
-  State<HoldingRow> createState() => _HoldingRowState();
-}
-
-class _HoldingRowState extends State<HoldingRow>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _flashController;
-  late Animation<double> _flashOpacity;
-  int? _previousLtp;
-  Color _flashColor = AppColors.profitGreen;
-
-  @override
-  void initState() {
-    super.initState();
-    _flashController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: Dimens.duration700ms),
-    );
-    _flashOpacity = Tween<double>(
-      begin: 1.0,
-      end: 0.0,
-    ).animate(CurvedAnimation(parent: _flashController, curve: Curves.easeOut));
-  }
-
-  @override
-  void dispose() {
-    _flashController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final holding = widget.holding;
     final stockInfo = kStockMap[holding.symbol];
 
     return Selector<MarketDataProvider, PriceTick?>(
       selector: (_, provider) => provider.getPrice(holding.symbol),
       builder: (context, tick, _) {
-        // Detect direction and trigger flash.
-        if (tick != null &&
-            _previousLtp != null &&
-            _previousLtp != tick.ltpPaise) {
-          _flashColor = tick.ltpPaise > _previousLtp!
-              ? AppColors.profitGreen
-              : AppColors.lossRed;
-          _flashController.forward(from: 0.0);
-        }
-        if (tick != null) _previousLtp = tick.ltpPaise;
-
         final ltpPaise = tick?.ltpPaise ?? holding.avgCostPaise;
         final pnl = holding.pnlPaise(ltpPaise);
         final pnlPct = holding.pnlPercent(ltpPaise);
@@ -71,13 +26,12 @@ class _HoldingRowState extends State<HoldingRow>
             vertical: Dimens.pad5,
           ),
           child: InkWell(
-            onTap: widget.onTap,
+            onTap: onTap,
             borderRadius: BorderRadius.circular(Dimens.radius12),
             child: Padding(
               padding: const EdgeInsets.all(Dimens.pad16),
               child: Column(
                 children: [
-                  // Top row: Symbol + LTP
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -105,25 +59,7 @@ class _HoldingRowState extends State<HoldingRow>
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          // LTP with subtle color flash
-                          _AnimatedBuilder(
-                            animation: _flashOpacity,
-                            builder: (context, _) {
-                              final color = Color.lerp(
-                                c.textPrimary,
-                                _flashColor,
-                                _flashOpacity.value,
-                              )!;
-                              return Text(
-                                '₹${AppFormatters.currency.format(ltpPaise / 100.0)}',
-                                style: TextStyle(
-                                  color: color,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: Dimens.font15,
-                                ),
-                              );
-                            },
-                          ),
+                          FlashingLtpText(ltpPaise: ltpPaise),
                           const SizedBox(height: Dimens.pad2),
                           Text(
                             AppStrings.livePrice,
@@ -136,12 +72,9 @@ class _HoldingRowState extends State<HoldingRow>
                       ),
                     ],
                   ),
-
                   const SizedBox(height: Dimens.pad12),
                   Container(height: Dimens.size1, color: c.border),
                   const SizedBox(height: Dimens.pad12),
-
-                  // Bottom row: Details grid
                   Row(
                     children: [
                       _DetailCell(
@@ -247,20 +180,5 @@ class _DetailCell extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-/// Lightweight AnimatedWidget wrapper.
-class _AnimatedBuilder extends AnimatedWidget {
-  final TransitionBuilder builder;
-
-  const _AnimatedBuilder({
-    required Animation<dynamic> animation,
-    required this.builder,
-  }) : super(listenable: animation);
-
-  @override
-  Widget build(BuildContext context) {
-    return builder(context, null);
   }
 }

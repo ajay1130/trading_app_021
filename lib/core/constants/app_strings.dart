@@ -100,4 +100,7 @@ class AppStrings {
   static String removedFromWatchlist(String symbol) =>
       '$symbol removed from watchlist';
   static String addedToWatchlist(String symbol) => '$symbol added to watchlist';
+
+  static const String toolTipToggleTheme = 'Toggle theme';
+
 }
