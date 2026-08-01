@@ -17,8 +17,9 @@ class EmptyStateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     return Center(
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.all(Dimens.pad32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -26,18 +27,18 @@ class EmptyStateWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(Dimens.pad20),
               decoration: BoxDecoration(
-                color: AppColors.cardBgElevated,
+                color: c.cardBgElevated,
                 shape: BoxShape.circle,
-                border: Border.all(color: AppColors.border),
+                border: Border.all(color: c.border),
               ),
-              child: Icon(icon, size: 48, color: AppColors.textMuted),
+              child: Icon(icon, size: Dimens.size48, color: c.textMuted),
             ),
             const SizedBox(height: Dimens.pad20),
             Text(
               title,
               style: Theme.of(
                 context,
-              ).textTheme.titleMedium?.copyWith(color: AppColors.textSecondary),
+              ).textTheme.titleMedium?.copyWith(color: c.textSecondary),
               textAlign: TextAlign.center,
             ),
             if (subtitle != null) ...[

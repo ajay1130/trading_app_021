@@ -41,6 +41,7 @@ class _WatchlistRowState extends State<WatchlistRow>
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     final stockInfo = kStockMap[widget.symbol];
 
     return Selector<MarketDataProvider, PriceTick?>(
@@ -86,8 +87,8 @@ class _WatchlistRowState extends State<WatchlistRow>
                       children: [
                         Text(
                           widget.symbol,
-                          style: const TextStyle(
-                            color: AppColors.textPrimary,
+                          style: TextStyle(
+                            color: c.textPrimary,
                             fontWeight: FontWeight.w700,
                             fontSize: Dimens.font15,
                           ),
@@ -96,8 +97,8 @@ class _WatchlistRowState extends State<WatchlistRow>
                           const SizedBox(height: 2),
                           Text(
                             stockInfo.name,
-                            style: const TextStyle(
-                              color: AppColors.textMuted,
+                            style: TextStyle(
+                              color: c.textMuted,
                               fontSize: Dimens.font12,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -117,7 +118,7 @@ class _WatchlistRowState extends State<WatchlistRow>
                           animation: _flashOpacity,
                           builder: (context, _) {
                             final color = Color.lerp(
-                              AppColors.textPrimary,
+                              c.textPrimary,
                               _flashColor,
                               _flashOpacity.value,
                             )!;
@@ -137,19 +138,19 @@ class _WatchlistRowState extends State<WatchlistRow>
                       ],
                     )
                   else
-                    const Text(
+                    Text(
                       '—',
                       style: TextStyle(
-                        color: AppColors.textMuted,
+                        color: c.textMuted,
                         fontSize: Dimens.font13,
                       ),
                     ),
 
                   // Drag handle
                   const SizedBox(width: Dimens.pad8),
-                  const Icon(
+                  Icon(
                     Icons.drag_handle_rounded,
-                    color: AppColors.textMuted,
+                    color: c.textMuted,
                     size: 20,
                   ),
                 ],

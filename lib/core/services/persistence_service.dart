@@ -12,6 +12,7 @@ class PersistenceService {
   static const _keyHoldings = 'holdings';
   static const _keyWalletBalance = 'wallet_balance';
   static const _keyOrders = 'orders';
+  static const _keyThemeMode = 'theme_mode';
 
   late Box _box;
 
@@ -84,5 +85,19 @@ class PersistenceService {
     if (json == null) return [];
     final list = jsonDecode(json) as List;
     return list.map((e) => Order.fromJson(e as Map<String, dynamic>)).toList();
+  }
+
+  // ── Theme Mode ─────────────────────────────────────────────
+
+  /// Save theme mode to disk.
+  Future<void> saveThemeMode(ThemeMode mode) async {
+    await _box.put(_keyThemeMode, mode.index);
+  }
+
+  /// Load theme mode from disk. Defaults to dark.
+  ThemeMode loadThemeMode() {
+    final index = _box.get(_keyThemeMode);
+    if (index == null) return ThemeMode.dark;
+    return ThemeMode.values[index as int];
   }
 }

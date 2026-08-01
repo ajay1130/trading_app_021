@@ -42,6 +42,7 @@ class _HoldingRowState extends State<HoldingRow>
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     final holding = widget.holding;
     final stockInfo = kStockMap[holding.symbol];
 
@@ -85,17 +86,17 @@ class _HoldingRowState extends State<HoldingRow>
                         children: [
                           Text(
                             holding.symbol,
-                            style: const TextStyle(
-                              color: AppColors.textPrimary,
+                            style: TextStyle(
+                              color: c.textPrimary,
                               fontWeight: FontWeight.w700,
-                              fontSize: Dimens.font16,
+                              fontSize: Dimens.font15,
                             ),
                           ),
                           if (stockInfo != null)
                             Text(
                               stockInfo.name,
-                              style: const TextStyle(
-                                color: AppColors.textMuted,
+                              style: TextStyle(
+                                color: c.textMuted,
                                 fontSize: Dimens.font12,
                               ),
                             ),
@@ -109,7 +110,7 @@ class _HoldingRowState extends State<HoldingRow>
                             animation: _flashOpacity,
                             builder: (context, _) {
                               final color = Color.lerp(
-                                AppColors.textPrimary,
+                                c.textPrimary,
                                 _flashColor,
                                 _flashOpacity.value,
                               )!;
@@ -118,16 +119,16 @@ class _HoldingRowState extends State<HoldingRow>
                                 style: TextStyle(
                                   color: color,
                                   fontWeight: FontWeight.w600,
-                                  fontSize: Dimens.font16,
+                                  fontSize: Dimens.font15,
                                 ),
                               );
                             },
                           ),
                           const SizedBox(height: Dimens.pad2),
-                          const Text(
+                          Text(
                             AppStrings.livePrice,
                             style: TextStyle(
-                              color: AppColors.textMuted,
+                              color: c.textMuted,
                               fontSize: Dimens.font10,
                             ),
                           ),
@@ -137,7 +138,7 @@ class _HoldingRowState extends State<HoldingRow>
                   ),
 
                   const SizedBox(height: Dimens.pad12),
-                  Container(height: Dimens.size1, color: AppColors.border),
+                  Container(height: Dimens.size1, color: c.border),
                   const SizedBox(height: Dimens.pad12),
 
                   // Bottom row: Details grid
@@ -217,6 +218,7 @@ class _DetailCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     return Expanded(
       flex: flex,
       child: Column(
@@ -224,8 +226,8 @@ class _DetailCell extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(
-              color: AppColors.textMuted,
+            style: TextStyle(
+              color: c.textMuted,
               fontSize: Dimens.font10,
             ),
           ),
@@ -235,8 +237,8 @@ class _DetailCell extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               value,
-              style: const TextStyle(
-                color: AppColors.textSecondary,
+              style: TextStyle(
+                color: c.textSecondary,
                 fontSize: Dimens.font12,
                 fontWeight: FontWeight.w500,
               ),

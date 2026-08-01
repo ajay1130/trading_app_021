@@ -8,9 +8,13 @@ class PortfolioSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     return Consumer2<HoldingsProvider, MarketDataProvider>(
       builder: (context, holdingsProvider, marketProvider, _) {
         final holdings = holdingsProvider.holdings;
+        if (holdings.isEmpty) {
+          return const SizedBox.shrink();
+        }
 
         int totalInvestedPaise = 0;
         int totalCurrentValuePaise = 0;
@@ -37,8 +41,8 @@ class PortfolioSummaryCard extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                AppColors.cardBg,
-                AppColors.cardBgElevated.withValues(alpha: 0.8),
+                c.cardBg,
+                c.cardBgElevated.withValues(alpha: 0.8),
               ],
             ),
             borderRadius: BorderRadius.circular(Dimens.radius16),
@@ -47,7 +51,7 @@ class PortfolioSummaryCard extends StatelessWidget {
                   ? AppColors.profitGreen.withValues(alpha: 0.2)
                   : totalPnlPaise < 0
                   ? AppColors.lossRed.withValues(alpha: 0.2)
-                  : AppColors.border,
+                  : c.border,
               width: 1,
             ),
             boxShadow: [
@@ -115,16 +119,16 @@ class PortfolioSummaryCard extends StatelessWidget {
               ),
 
               const SizedBox(height: Dimens.pad4),
-              const Text(
+              Text(
                 AppStrings.totalPnl,
                 style: TextStyle(
-                  color: AppColors.textMuted,
+                  color: c.textMuted,
                   fontSize: Dimens.font12,
                 ),
               ),
 
               const SizedBox(height: Dimens.pad16),
-              Container(height: Dimens.size1, color: AppColors.border),
+              Container(height: Dimens.size1, color: c.border),
               const SizedBox(height: Dimens.pad16),
 
               // Details row
@@ -140,7 +144,7 @@ class PortfolioSummaryCard extends StatelessWidget {
                   Container(
                     width: Dimens.size1,
                     height: Dimens.size36,
-                    color: AppColors.border,
+                    color: c.border,
                   ),
                   Expanded(
                     child: _SummaryCell(
@@ -167,12 +171,13 @@ class _SummaryCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     return Column(
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: AppColors.textMuted,
+          style: TextStyle(
+            color: c.textMuted,
             fontSize: Dimens.font12,
           ),
         ),
@@ -181,8 +186,8 @@ class _SummaryCell extends StatelessWidget {
           fit: BoxFit.scaleDown,
           child: Text(
             value,
-            style: const TextStyle(
-              color: AppColors.textPrimary,
+            style: TextStyle(
+              color: c.textPrimary,
               fontWeight: FontWeight.w600,
               fontSize: Dimens.font15,
             ),

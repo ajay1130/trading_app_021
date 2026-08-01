@@ -46,6 +46,7 @@ class _PriceTileState extends State<PriceTile>
     return Selector<MarketDataProvider, PriceTick?>(
       selector: (_, provider) => provider.getPrice(widget.symbol),
       builder: (context, tick, child) {
+        final c = context.colors;
         // Detect direction and trigger flash.
         if (tick != null &&
             _previousLtp != null &&
@@ -71,9 +72,9 @@ class _PriceTileState extends State<PriceTile>
               vertical: Dimens.pad14,
             ),
             decoration: BoxDecoration(
-              color: AppColors.cardBg,
+              color: c.cardBg,
               borderRadius: BorderRadius.circular(Dimens.radius12),
-              border: Border.all(color: AppColors.border),
+              border: Border.all(color: c.border),
             ),
             child: tick == null
                 ? _buildShimmer()
@@ -86,8 +87,8 @@ class _PriceTileState extends State<PriceTile>
                           children: [
                             Text(
                               widget.symbol,
-                              style: const TextStyle(
-                                color: AppColors.textPrimary,
+                              style: TextStyle(
+                                color: c.textPrimary,
                                 fontSize: Dimens.font15,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -95,8 +96,8 @@ class _PriceTileState extends State<PriceTile>
                             const SizedBox(height: Dimens.pad3),
                             Text(
                               companyName,
-                              style: const TextStyle(
-                                color: AppColors.textMuted,
+                              style: TextStyle(
+                                color: c.textMuted,
                                 fontSize: Dimens.font12,
                               ),
                               maxLines: 1,
@@ -114,9 +115,10 @@ class _PriceTileState extends State<PriceTile>
                           _AnimatedBuilder(
                             animation: _flashOpacity,
                             builder: (context, _) {
-                              // During flash: show green/red. After: white.
+                              final c = context.colors;
+                              // During flash: show green/red. After: normal text color.
                               final color = Color.lerp(
-                                AppColors.textPrimary,
+                                c.textPrimary,
                                 _flashColor,
                                 _flashOpacity.value,
                               )!;
@@ -184,11 +186,12 @@ class _PriceTileState extends State<PriceTile>
   }
 
   Widget _shimmerBlock(double width, double height) {
+    final c = context.colors;
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: AppColors.cardBgElevated,
+        color: c.cardBgElevated,
         borderRadius: BorderRadius.circular(Dimens.radius4),
       ),
     );

@@ -26,6 +26,10 @@ class WatchlistScreen extends StatelessWidget {
           }
 
           return ListView.builder(
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics(),
+            ),
+            cacheExtent: 300,
             padding: const EdgeInsets.only(
               top: Dimens.pad8,
               bottom: Dimens.size80,
@@ -96,6 +100,7 @@ class WatchlistScreen extends StatelessWidget {
     String watchlistId,
     String currentName,
   ) {
+    final c = context.colors;
     showModalBottomSheet(
       context: context,
       builder: (ctx) => SafeArea(
@@ -107,7 +112,7 @@ class WatchlistScreen extends StatelessWidget {
               width: Dimens.pad40,
               height: Dimens.pad4,
               decoration: BoxDecoration(
-                color: AppColors.textMuted,
+                color: c.textMuted,
                 borderRadius: BorderRadius.circular(Dimens.radius2),
               ),
             ),
@@ -224,6 +229,7 @@ class _WatchlistCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     return Card(
       margin: const EdgeInsets.symmetric(
         horizontal: Dimens.pad16,
@@ -263,9 +269,9 @@ class _WatchlistCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(
+              Icon(
                 Icons.chevron_right_rounded,
-                color: AppColors.textMuted,
+                color: c.textMuted,
               ),
             ],
           ),

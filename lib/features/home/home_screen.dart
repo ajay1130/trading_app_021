@@ -22,9 +22,9 @@ class HomeScreen extends StatelessWidget {
         },
       ),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(
-            top: BorderSide(color: AppColors.border, width: Dimens.size1),
+            top: BorderSide(color: context.colors.border, width: Dimens.size1),
           ),
         ),
         child: Consumer<NavigationProvider>(

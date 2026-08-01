@@ -101,12 +101,13 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
   @override
   Widget build(BuildContext context) {
     final stockName = kStockMap[widget.symbol]?.name ?? widget.symbol;
+    final c = context.colors;
 
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBg,
+      backgroundColor: c.scaffoldBg,
       appBar: AppBar(
         title: const Text(AppStrings.orderTicket),
-        backgroundColor: AppColors.scaffoldBg,
+        backgroundColor: c.scaffoldBg,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -117,8 +118,8 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
             // Header
             Text(
               widget.symbol,
-              style: const TextStyle(
-                color: AppColors.textPrimary,
+              style: TextStyle(
+                color: c.textPrimary,
                 fontSize: Dimens.font28,
                 fontWeight: FontWeight.bold,
               ),
@@ -126,8 +127,8 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
             const SizedBox(height: Dimens.pad4),
             Text(
               stockName,
-              style: const TextStyle(
-                color: AppColors.textSecondary,
+              style: TextStyle(
+                color: c.textSecondary,
                 fontSize: Dimens.font16,
               ),
             ),
@@ -137,11 +138,12 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
             Selector<MarketDataProvider, PriceTick?>(
               selector: (_, provider) => provider.getPrice(widget.symbol),
               builder: (context, priceTick, child) {
+                final c = context.colors;
                 if (priceTick == null) {
                   return Container(
                     padding: const EdgeInsets.all(Dimens.pad16),
                     decoration: BoxDecoration(
-                      color: AppColors.cardBgElevated,
+                      color: c.cardBgElevated,
                       borderRadius: BorderRadius.circular(Dimens.radius12),
                     ),
                     child: const Center(
@@ -161,9 +163,9 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
                 return Container(
                   padding: const EdgeInsets.all(Dimens.pad16),
                   decoration: BoxDecoration(
-                    color: AppColors.cardBgElevated,
+                    color: c.cardBgElevated,
                     borderRadius: BorderRadius.circular(Dimens.radius12),
-                    border: Border.all(color: AppColors.border),
+                    border: Border.all(color: c.border),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -171,10 +173,10 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             AppStrings.livePrice,
                             style: TextStyle(
-                              color: AppColors.textSecondary,
+                              color: c.textSecondary,
                               fontSize: Dimens.font12,
                             ),
                           ),
@@ -232,10 +234,10 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
                       decoration: BoxDecoration(
                         color: _isBuy
                             ? AppColors.buyGreen
-                            : AppColors.cardBgElevated,
+                            : c.cardBgElevated,
                         borderRadius: BorderRadius.circular(Dimens.radius10),
                         border: Border.all(
-                          color: _isBuy ? AppColors.buyGreen : AppColors.border,
+                          color: _isBuy ? AppColors.buyGreen : c.border,
                         ),
                       ),
                       child: Center(
@@ -244,7 +246,7 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
                           style: TextStyle(
                             color: _isBuy
                                 ? Colors.white
-                                : AppColors.textSecondary,
+                                : c.textSecondary,
                             fontWeight: FontWeight.bold,
                             fontSize: Dimens.font16,
                           ),
@@ -268,10 +270,10 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
                       decoration: BoxDecoration(
                         color: !_isBuy
                             ? AppColors.sellRed
-                            : AppColors.cardBgElevated,
+                            : c.cardBgElevated,
                         borderRadius: BorderRadius.circular(Dimens.radius10),
                         border: Border.all(
-                          color: !_isBuy ? AppColors.sellRed : AppColors.border,
+                          color: !_isBuy ? AppColors.sellRed : c.border,
                         ),
                       ),
                       child: Center(
@@ -280,7 +282,7 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
                           style: TextStyle(
                             color: !_isBuy
                                 ? Colors.white
-                                : AppColors.textSecondary,
+                                : c.textSecondary,
                             fontWeight: FontWeight.bold,
                             fontSize: Dimens.font16,
                           ),
@@ -297,8 +299,8 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
             TextFormField(
               controller: _qtyController,
               keyboardType: TextInputType.number,
-              style: const TextStyle(
-                color: AppColors.textPrimary,
+              style: TextStyle(
+                color: c.textPrimary,
                 fontSize: Dimens.font18,
               ),
               onChanged: (_) => setState(() => _error = null),
@@ -310,6 +312,7 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
             // Order summary card
             Consumer3<MarketDataProvider, WalletProvider, HoldingsProvider>(
               builder: (context, market, wallet, holdings, child) {
+                final c = context.colors;
                 final priceTick = market.getPrice(widget.symbol);
                 final ltpPaise = priceTick?.ltpPaise ?? 0;
                 final qty = int.tryParse(_qtyController.text) ?? 0;
@@ -323,9 +326,9 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
                 return Container(
                   padding: const EdgeInsets.all(Dimens.pad16),
                   decoration: BoxDecoration(
-                    color: AppColors.cardBgElevated,
+                    color: c.cardBgElevated,
                     borderRadius: BorderRadius.circular(Dimens.radius12),
-                    border: Border.all(color: AppColors.border),
+                    border: Border.all(color: c.border),
                   ),
                   child: Column(
                     children: [
@@ -335,7 +338,7 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
                         bold: true,
                       ),
                       const SizedBox(height: Dimens.pad12),
-                      Container(height: Dimens.size1, color: AppColors.border),
+                      Container(height: Dimens.size1, color: c.border),
                       const SizedBox(height: Dimens.pad12),
                       if (_isBuy)
                         _summaryRow(
@@ -402,7 +405,7 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
                       ? AppColors.buyGreen
                       : AppColors.sellRed,
                   foregroundColor: Colors.white,
-                  disabledBackgroundColor: AppColors.cardBgElevated,
+                  disabledBackgroundColor: c.cardBgElevated,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(Dimens.radius12),
                   ),
@@ -434,20 +437,21 @@ class _BuySellTicketScreenState extends State<BuySellTicketScreen> {
   }
 
   Widget _summaryRow(String label, String value, {bool bold = false}) {
+    final c = context.colors;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: AppColors.textSecondary,
+          style: TextStyle(
+            color: c.textSecondary,
             fontSize: Dimens.font14,
           ),
         ),
         Text(
           value,
           style: TextStyle(
-            color: AppColors.textPrimary,
+            color: c.textPrimary,
             fontSize: Dimens.font14,
             fontWeight: bold ? FontWeight.w700 : FontWeight.w500,
           ),

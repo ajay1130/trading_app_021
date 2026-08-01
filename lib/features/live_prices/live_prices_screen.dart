@@ -43,17 +43,18 @@ class _LivePricesScreenState extends State<LivePricesScreen>
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBg,
+      backgroundColor: c.scaffoldBg,
       appBar: AppBar(
-        backgroundColor: AppColors.scaffoldBg,
+        backgroundColor: c.scaffoldBg,
         elevation: 0,
         title: Row(
           children: [
-            const Text(
+            Text(
               AppStrings.marketOverview,
               style: TextStyle(
-                color: AppColors.textPrimary,
+                color: c.textPrimary,
                 fontSize: Dimens.font20,
                 fontWeight: FontWeight.bold,
               ),
@@ -73,21 +74,29 @@ class _LivePricesScreenState extends State<LivePricesScreen>
           ],
         ),
         actions: [
+          Consumer<ThemeProvider>(
+            builder: (context, tp, _) => IconButton(
+              icon: Icon(tp.isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded),
+              onPressed: tp.toggle,
+              tooltip: 'Toggle theme',
+            ),
+          ),
           Selector<MarketDataProvider, int>(
             selector: (_, provider) => provider.batchIntervalMs,
             builder: (context, intervalMs, _) {
+              final c = context.colors;
               return PopupMenuButton<int>(
                 icon: const Icon(Icons.speed_rounded, size: Dimens.size22),
                 tooltip: AppStrings.tickRateTooltip,
                 initialValue: intervalMs,
                 onSelected: _onTickRateSelected,
                 itemBuilder: (_) => [
-                  const PopupMenuItem<int>(
+                  PopupMenuItem<int>(
                     enabled: false,
                     child: Text(
                       AppStrings.tickRate,
                       style: TextStyle(
-                        color: AppColors.textMuted,
+                        color: c.textMuted,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

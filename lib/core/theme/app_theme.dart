@@ -1,14 +1,80 @@
 import 'package:trading_app_021/util/exports.dart';
 
-/// App-wide color constants for a premium dark trading theme.
+// ─── Theme-Varying Color Tokens ─────────────────────────────────────────────
+
+/// Semantic colors that change between dark and light themes.
+/// Access via `context.colors` extension.
+class AppColorsExt extends ThemeExtension<AppColorsExt> {
+  final Color scaffoldBg, cardBg, cardBgElevated, surfaceBg;
+  final Color textPrimary, textSecondary, textMuted;
+  final Color border, borderLight;
+
+  const AppColorsExt({
+    required this.scaffoldBg,
+    required this.cardBg,
+    required this.cardBgElevated,
+    required this.surfaceBg,
+    required this.textPrimary,
+    required this.textSecondary,
+    required this.textMuted,
+    required this.border,
+    required this.borderLight,
+  });
+
+  static const dark = AppColorsExt(
+    scaffoldBg: Color(0xFF0A0E17),
+    cardBg: Color(0xFF111827),
+    cardBgElevated: Color(0xFF1A2332),
+    surfaceBg: Color(0xFF0F1623),
+    textPrimary: Color(0xFFF1F5F9),
+    textSecondary: Color(0xFF94A3B8),
+    textMuted: Color(0xFF64748B),
+    border: Color(0xFF1E293B),
+    borderLight: Color(0xFF334155),
+  );
+
+  static const light = AppColorsExt(
+    scaffoldBg: Color(0xFFF8FAFC),
+    cardBg: Color(0xFFFFFFFF),
+    cardBgElevated: Color(0xFFF1F5F9),
+    surfaceBg: Color(0xFFFFFFFF),
+    textPrimary: Color(0xFF0F172A),
+    textSecondary: Color(0xFF475569),
+    textMuted: Color(0xFF94A3B8),
+    border: Color(0xFFE2E8F0),
+    borderLight: Color(0xFFCBD5E1),
+  );
+
+  @override
+  AppColorsExt copyWith() => this;
+
+  @override
+  AppColorsExt lerp(AppColorsExt? other, double t) {
+    if (other is! AppColorsExt) return this;
+    return AppColorsExt(
+      scaffoldBg: Color.lerp(scaffoldBg, other.scaffoldBg, t)!,
+      cardBg: Color.lerp(cardBg, other.cardBg, t)!,
+      cardBgElevated: Color.lerp(cardBgElevated, other.cardBgElevated, t)!,
+      surfaceBg: Color.lerp(surfaceBg, other.surfaceBg, t)!,
+      textPrimary: Color.lerp(textPrimary, other.textPrimary, t)!,
+      textSecondary: Color.lerp(textSecondary, other.textSecondary, t)!,
+      textMuted: Color.lerp(textMuted, other.textMuted, t)!,
+      border: Color.lerp(border, other.border, t)!,
+      borderLight: Color.lerp(borderLight, other.borderLight, t)!,
+    );
+  }
+}
+
+/// Quick access: `context.colors.cardBg`, `context.colors.textPrimary`, etc.
+extension AppColorsX on BuildContext {
+  AppColorsExt get colors => Theme.of(this).extension<AppColorsExt>()!;
+}
+
+// ─── Static Colors (same in both themes) ────────────────────────────────────
+
+/// Colors that don't change between dark/light (accents, profit/loss).
 class AppColors {
   AppColors._();
-
-  // ── Backgrounds ──
-  static const Color scaffoldBg = Color(0xFF0A0E17);
-  static const Color cardBg = Color(0xFF111827);
-  static const Color cardBgElevated = Color(0xFF1A2332);
-  static const Color surfaceBg = Color(0xFF0F1623);
 
   // ── Accent ──
   static const Color primary = Color(0xFF3B82F6);
@@ -25,115 +91,96 @@ class AppColors {
   static const Color flashGreen = Color(0x3300C853);
   static const Color flashRed = Color(0x33FF1744);
 
-  // ── Text ──
-  static const Color textPrimary = Color(0xFFF1F5F9);
-  static const Color textSecondary = Color(0xFF94A3B8);
-  static const Color textMuted = Color(0xFF64748B);
-
-  // ── Borders ──
-  static const Color border = Color(0xFF1E293B);
-  static const Color borderLight = Color(0xFF334155);
-
   // ── Buy / Sell ──
   static const Color buyGreen = Color(0xFF00C853);
   static const Color sellRed = Color(0xFFFF1744);
 }
 
-/// Premium dark theme for the trading app.
+// ─── Theme Builder ──────────────────────────────────────────────────────────
+
+/// Builds dark and light [ThemeData] from a shared helper.
 class AppTheme {
   AppTheme._();
 
-  static ThemeData get darkTheme {
-    final baseTextTheme = GoogleFonts.interTextTheme(
-      ThemeData.dark().textTheme,
-    );
+  static ThemeData _build(AppColorsExt c, Brightness brightness) {
+    final base =
+        brightness == Brightness.dark ? ThemeData.dark() : ThemeData.light();
+    final txt = GoogleFonts.interTextTheme(base.textTheme);
 
     return ThemeData(
-      brightness: Brightness.dark,
-      scaffoldBackgroundColor: AppColors.scaffoldBg,
+      brightness: brightness,
+      scaffoldBackgroundColor: c.scaffoldBg,
       primaryColor: AppColors.primary,
-      colorScheme: const ColorScheme.dark(
+      extensions: [c],
+      colorScheme: (brightness == Brightness.dark
+              ? const ColorScheme.dark()
+              : const ColorScheme.light())
+          .copyWith(
         primary: AppColors.primary,
         secondary: AppColors.primaryLight,
-        surface: AppColors.cardBg,
+        surface: c.cardBg,
         error: AppColors.lossRed,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
-        onSurface: AppColors.textPrimary,
+        onSurface: c.textPrimary,
         onError: Colors.white,
       ),
-      textTheme: baseTextTheme.copyWith(
-        headlineLarge: baseTextTheme.headlineLarge?.copyWith(
-          color: AppColors.textPrimary,
-          fontWeight: FontWeight.w700,
-        ),
-        headlineMedium: baseTextTheme.headlineMedium?.copyWith(
-          color: AppColors.textPrimary,
-          fontWeight: FontWeight.w600,
-        ),
-        titleLarge: baseTextTheme.titleLarge?.copyWith(
-          color: AppColors.textPrimary,
-          fontWeight: FontWeight.w600,
-        ),
-        titleMedium: baseTextTheme.titleMedium?.copyWith(
-          color: AppColors.textPrimary,
-          fontWeight: FontWeight.w500,
-        ),
-        bodyLarge: baseTextTheme.bodyLarge?.copyWith(
-          color: AppColors.textPrimary,
-        ),
-        bodyMedium: baseTextTheme.bodyMedium?.copyWith(
-          color: AppColors.textSecondary,
-        ),
-        bodySmall: baseTextTheme.bodySmall?.copyWith(
-          color: AppColors.textMuted,
-        ),
-        labelLarge: baseTextTheme.labelLarge?.copyWith(
-          color: AppColors.textPrimary,
-          fontWeight: FontWeight.w600,
-        ),
+      textTheme: txt.copyWith(
+        headlineLarge: txt.headlineLarge?.copyWith(
+            color: c.textPrimary, fontWeight: FontWeight.w700),
+        headlineMedium: txt.headlineMedium?.copyWith(
+            color: c.textPrimary, fontWeight: FontWeight.w600),
+        titleLarge: txt.titleLarge?.copyWith(
+            color: c.textPrimary, fontWeight: FontWeight.w600),
+        titleMedium: txt.titleMedium?.copyWith(
+            color: c.textPrimary, fontWeight: FontWeight.w500),
+        bodyLarge: txt.bodyLarge?.copyWith(color: c.textPrimary),
+        bodyMedium: txt.bodyMedium?.copyWith(color: c.textSecondary),
+        bodySmall: txt.bodySmall?.copyWith(color: c.textMuted),
+        labelLarge: txt.labelLarge?.copyWith(
+            color: c.textPrimary, fontWeight: FontWeight.w600),
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.scaffoldBg,
+        backgroundColor: c.scaffoldBg,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
         titleTextStyle: GoogleFonts.inter(
           fontSize: Dimens.font20,
           fontWeight: FontWeight.w700,
-          color: AppColors.textPrimary,
+          color: c.textPrimary,
         ),
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
+        iconTheme: IconThemeData(color: c.textPrimary),
       ),
       cardTheme: CardThemeData(
-        color: AppColors.cardBg,
+        color: c.cardBg,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Dimens.radius12),
-          side: const BorderSide(color: AppColors.border, width: 1),
+          side: BorderSide(color: c.border, width: 1),
         ),
         margin: const EdgeInsets.symmetric(
           horizontal: Dimens.pad16,
           vertical: Dimens.pad6,
         ),
       ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: AppColors.surfaceBg,
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: c.surfaceBg,
         selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textMuted,
+        unselectedItemColor: c.textMuted,
         type: BottomNavigationBarType.fixed,
         elevation: 0,
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.cardBgElevated,
+        fillColor: c.cardBgElevated,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(Dimens.radius10),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: c.border),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(Dimens.radius10),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: c.border),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(Dimens.radius10),
@@ -143,8 +190,8 @@ class AppTheme {
           borderRadius: BorderRadius.circular(Dimens.radius10),
           borderSide: const BorderSide(color: AppColors.lossRed),
         ),
-        labelStyle: const TextStyle(color: AppColors.textSecondary),
-        hintStyle: const TextStyle(color: AppColors.textMuted),
+        labelStyle: TextStyle(color: c.textSecondary),
+        hintStyle: TextStyle(color: c.textMuted),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: Dimens.pad16,
           vertical: Dimens.pad14,
@@ -172,32 +219,43 @@ class AppTheme {
         foregroundColor: Colors.white,
       ),
       dialogTheme: DialogThemeData(
-        backgroundColor: AppColors.cardBg,
+        backgroundColor: c.cardBg,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Dimens.radius16),
         ),
       ),
-      bottomSheetTheme: const BottomSheetThemeData(
-        backgroundColor: AppColors.cardBg,
-        shape: RoundedRectangleBorder(
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: c.cardBg,
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(Dimens.radius20),
           ),
         ),
       ),
-      dividerTheme: const DividerThemeData(
-        color: AppColors.border,
+      dividerTheme: DividerThemeData(
+        color: c.border,
         thickness: 1,
         space: 0,
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: AppColors.cardBgElevated,
-        contentTextStyle: GoogleFonts.inter(color: AppColors.textPrimary),
+        backgroundColor: c.cardBgElevated,
+        contentTextStyle: GoogleFonts.inter(color: c.textPrimary),
+        actionTextColor: AppColors.primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Dimens.radius8),
         ),
         behavior: SnackBarBehavior.floating,
       ),
+      popupMenuTheme: PopupMenuThemeData(
+        color: c.cardBg,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Dimens.radius12),
+        ),
+      ),
     );
   }
+
+  static ThemeData get darkTheme => _build(AppColorsExt.dark, Brightness.dark);
+  static ThemeData get lightTheme =>
+      _build(AppColorsExt.light, Brightness.light);
 }

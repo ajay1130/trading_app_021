@@ -82,6 +82,20 @@ class WatchlistProvider extends ChangeNotifier {
     await _persist();
   }
 
+  /// Insert a stock at a specific index (used for undo after removal).
+  Future<void> insertStockAt(
+    String watchlistId,
+    String symbol,
+    int index,
+  ) async {
+    final watchlist = _watchlists.firstWhere((w) => w.id == watchlistId);
+    if (watchlist.symbols.contains(symbol)) return;
+    final insertIndex = index.clamp(0, watchlist.symbols.length);
+    watchlist.symbols.insert(insertIndex, symbol);
+    notifyListeners();
+    await _persist();
+  }
+
   /// Reorder stocks within a watchlist.
   Future<void> reorderStocks(
     String watchlistId,

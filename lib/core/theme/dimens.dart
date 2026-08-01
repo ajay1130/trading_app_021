@@ -51,9 +51,13 @@ abstract class Dimens {
   static const double font28 = 28.0;
   static const double font32 = 32.0;
 
+  // Bottom sheet
+  static const double bottomSheetHeightRatio = 0.8;
+
   // Additional sizes
   static const double size1 = 1.0;
   static const double size3 = 3.0;
+  static const double size16 = 16.0;
   static const double size22 = 22.0;
   static const double size24 = 24.0;
   static const double size36 = 36.0;

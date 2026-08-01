@@ -6,6 +6,7 @@ class OrderHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     return Scaffold(
       appBar: AppBar(title: const Text(AppStrings.orderHistory)),
       body: Consumer<WalletProvider>(
@@ -20,28 +21,28 @@ class OrderHistoryScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(Dimens.pad20),
                     decoration: BoxDecoration(
-                      color: AppColors.cardBgElevated,
+                      color: c.cardBgElevated,
                       shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.border),
+                      border: Border.all(color: c.border),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.receipt_long_rounded,
                       size: Dimens.size48,
-                      color: AppColors.textMuted,
+                      color: c.textMuted,
                     ),
                   ),
                   const SizedBox(height: Dimens.pad20),
                   Text(
                     AppStrings.noOrdersTitle,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: AppColors.textSecondary,
+                      color: c.textSecondary,
                     ),
                   ),
                   const SizedBox(height: Dimens.pad8),
-                  const Text(
+                  Text(
                     AppStrings.noOrdersSubtitle,
                     style: TextStyle(
-                      color: AppColors.textMuted,
+                      color: c.textMuted,
                       fontSize: Dimens.font13,
                     ),
                   ),
@@ -57,25 +58,25 @@ class OrderHistoryScreen extends StatelessWidget {
                 margin: const EdgeInsets.all(Dimens.pad16),
                 padding: const EdgeInsets.all(Dimens.pad16),
                 decoration: BoxDecoration(
-                  color: AppColors.cardBg,
+                  color: c.cardBg,
                   borderRadius: BorderRadius.circular(Dimens.radius12),
-                  border: Border.all(color: AppColors.border),
+                  border: Border.all(color: c.border),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       AppStrings.availableBalance,
                       style: TextStyle(
-                        color: AppColors.textSecondary,
+                        color: c.textSecondary,
                         fontSize: Dimens.font14,
                       ),
                     ),
                     Flexible(
                       child: Text(
                         '₹${AppFormatters.currency.format(wallet.balancePaise / 100.0)}',
-                        style: const TextStyle(
-                          color: AppColors.textPrimary,
+                        style: TextStyle(
+                          color: c.textPrimary,
                           fontSize: Dimens.font18,
                           fontWeight: FontWeight.w700,
                         ),
@@ -140,8 +141,8 @@ class OrderHistoryScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                     order.symbol,
-                                    style: const TextStyle(
-                                      color: AppColors.textPrimary,
+                                    style: TextStyle(
+                                      color: c.textPrimary,
                                       fontWeight: FontWeight.w600,
                                       fontSize: Dimens.font15,
                                     ),
@@ -150,8 +151,8 @@ class OrderHistoryScreen extends StatelessWidget {
                                   const SizedBox(height: Dimens.pad2),
                                   Text(
                                     '${order.quantity} × ₹${AppFormatters.currency.format(order.priceRupees)}',
-                                    style: const TextStyle(
-                                      color: AppColors.textMuted,
+                                    style: TextStyle(
+                                      color: c.textMuted,
                                       fontSize: Dimens.font12,
                                     ),
                                     overflow: TextOverflow.ellipsis,
@@ -168,8 +169,8 @@ class OrderHistoryScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                     '₹${AppFormatters.currency.format(order.totalRupees)}',
-                                    style: const TextStyle(
-                                      color: AppColors.textPrimary,
+                                    style: TextStyle(
+                                      color: c.textPrimary,
                                       fontWeight: FontWeight.w600,
                                       fontSize: Dimens.font14,
                                     ),
@@ -178,8 +179,8 @@ class OrderHistoryScreen extends StatelessWidget {
                                   const SizedBox(height: Dimens.pad2),
                                   Text(
                                     _formatTime(order.timestamp),
-                                    style: const TextStyle(
-                                      color: AppColors.textMuted,
+                                    style: TextStyle(
+                                      color: c.textMuted,
                                       fontSize: Dimens.font11,
                                     ),
                                     overflow: TextOverflow.ellipsis,

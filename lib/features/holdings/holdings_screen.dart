@@ -16,81 +16,84 @@ class _HoldingsScreenState extends State<HoldingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(AppStrings.holdings),
-        actions: [
-          PopupMenuButton<HoldingsSortBy>(
-            icon: const Icon(Icons.sort_rounded, size: 22),
-            tooltip: AppStrings.sortBy,
-            onSelected: (value) => setState(() => _sortBy = value),
-            itemBuilder: (_) => [
-              _sortMenuItem(
-                HoldingsSortBy.pnl,
-                AppStrings.sortPnl,
-                Icons.trending_up,
-              ),
-              _sortMenuItem(
-                HoldingsSortBy.symbol,
-                AppStrings.sortSymbol,
-                Icons.sort_by_alpha,
-              ),
-              _sortMenuItem(
-                HoldingsSortBy.currentValue,
-                AppStrings.sortCurrentValue,
-                Icons.currency_rupee,
-              ),
+    return Consumer2<HoldingsProvider, MarketDataProvider>(
+      builder: (context, holdingsProvider, marketProvider, _) {
+        final holdings = holdingsProvider.holdings;
+        final hasHoldings = holdings.isNotEmpty;
+
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text(AppStrings.holdings),
+            actions: [
+              if (hasHoldings)
+                PopupMenuButton<HoldingsSortBy>(
+                  icon: const Icon(Icons.sort_rounded, size: 22),
+                  tooltip: AppStrings.sortBy,
+                  onSelected: (value) => setState(() => _sortBy = value),
+                  itemBuilder: (_) => [
+                    _sortMenuItem(
+                      HoldingsSortBy.pnl,
+                      AppStrings.sortPnl,
+                      Icons.trending_up,
+                    ),
+                    _sortMenuItem(
+                      HoldingsSortBy.symbol,
+                      AppStrings.sortSymbol,
+                      Icons.sort_by_alpha,
+                    ),
+                    _sortMenuItem(
+                      HoldingsSortBy.currentValue,
+                      AppStrings.sortCurrentValue,
+                      Icons.currency_rupee,
+                    ),
+                  ],
+                ),
             ],
           ),
-        ],
-      ),
-      body: Consumer2<HoldingsProvider, MarketDataProvider>(
-        builder: (context, holdingsProvider, marketProvider, _) {
-          final holdings = holdingsProvider.holdings;
-
-          if (holdings.isEmpty) {
-            return const EmptyStateWidget(
-              icon: Icons.account_balance_wallet_rounded,
-              title: AppStrings.noHoldingsTitle,
-              subtitle: AppStrings.noHoldingsSubtitle,
-            );
-          }
-
-          // Sort holdings based on current selection.
-          final sorted = List<Holding>.from(holdings);
-          _sortHoldings(sorted, marketProvider);
-
-          return Column(
-            children: [
-              // Portfolio summary at top
-              const PortfolioSummaryCard(),
-
-              // Holdings list
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.only(bottom: Dimens.pad16),
-                  itemCount: sorted.length,
-                  itemBuilder: (context, index) {
-                    final holding = sorted[index];
-                    return HoldingRow(
-                      holding: holding,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                BuySellTicketScreen(symbol: holding.symbol),
-                          ),
-                        );
-                      },
-                    );
-                  },
+          body: hasHoldings
+              ? _buildHoldingsList(holdings, marketProvider)
+              : const EmptyStateWidget(
+                  icon: Icons.account_balance_wallet_rounded,
+                  title: AppStrings.noHoldingsTitle,
+                  subtitle: AppStrings.noHoldingsSubtitle,
                 ),
-              ),
-            ],
-          );
-        },
-      ),
+        );
+      },
+    );
+  }
+
+  Widget _buildHoldingsList(
+    List<Holding> holdings,
+    MarketDataProvider marketProvider,
+  ) {
+    final sorted = List<Holding>.from(holdings);
+    _sortHoldings(sorted, marketProvider);
+
+    return Column(
+      children: [
+        const PortfolioSummaryCard(),
+        Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.only(bottom: Dimens.pad16),
+            itemCount: sorted.length,
+            itemBuilder: (context, index) {
+              final holding = sorted[index];
+              return HoldingRow(
+                holding: holding,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          BuySellTicketScreen(symbol: holding.symbol),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -118,6 +121,7 @@ class _HoldingsScreenState extends State<HoldingsScreen> {
     String label,
     IconData icon,
   ) {
+    final c = context.colors;
     final isSelected = _sortBy == value;
     return PopupMenuItem(
       value: value,
@@ -126,19 +130,19 @@ class _HoldingsScreenState extends State<HoldingsScreen> {
           Icon(
             icon,
             size: 18,
-            color: isSelected ? AppColors.primary : AppColors.textSecondary,
+            color: isSelected ? AppColors.primary : c.textSecondary,
           ),
           const SizedBox(width: Dimens.pad10),
           Text(
             label,
             style: TextStyle(
-              color: isSelected ? AppColors.primary : AppColors.textPrimary,
+              color: isSelected ? AppColors.primary : c.textPrimary,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
             ),
           ),
           const Spacer(),
           if (isSelected)
-            const Icon(Icons.check, size: 16, color: AppColors.primary),
+            const Icon(Icons.check, size: Dimens.size16, color: AppColors.primary),
         ],
       ),
     );
